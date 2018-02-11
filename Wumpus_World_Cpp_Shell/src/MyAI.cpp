@@ -42,11 +42,34 @@ Agent::Action MyAI::getAction
 	// ======================================================================
 	// YOUR CODE BEGINS
 	// ======================================================================
-	
-	return CLIMB;
+	//printf("agentY: %d, Dir: %d, path_back: %d\n", agentY, dir, is_return );
+	if (agentY == 0 && dir == 0)
+		return CLIMB;
+
+	if (glitter){
+		is_return = true;
+		return GRAB;
+	}
+
+	if (stench || breeze || bump )
+		is_return = true;
+
+	if (is_return && dir != 0){
+		dir -= 1;
+		return TURN_LEFT;
+	}
+
+	if (is_return && dir == 0){
+		agentY -= 1;
+		return FORWARD;
+	}
+
+	agentY += 1;
+	return FORWARD;
 	// ======================================================================
 	// YOUR CODE ENDS
 	// ======================================================================
+	
 }
 
 // ======================================================================
