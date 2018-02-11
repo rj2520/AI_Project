@@ -25,7 +25,13 @@ class MyAI ( Agent ):
         # ======================================================================
         # YOUR CODE BEGINS
         # ======================================================================
-        
+        self._AgentX = 0
+        self._AgentY = 0
+        #self._track_back = []
+        self._is_back = False
+        self._dir = 2 #left : 0, up : 1, right : 2, down : 3
+
+
         pass
         # ======================================================================
         # YOUR CODE ENDS
@@ -35,15 +41,53 @@ class MyAI ( Agent ):
         # ======================================================================
         # YOUR CODE BEGINS
         # ======================================================================
+        #print(self._AgentY, self._AgentX, self._dir, bump, stench, breeze)
+        if self._dir == 0 and self._AgentY == 0:
+            return Agent.Action.CLIMB
+
+        if self._is_back and self._AgentX == 0 and self._AgentY == 0:
+            return Agent.Action.CLIMB
+
         if glitter:
             return Agent.Action.GRAB
 
+        if stench or breeze or bump:
+            self._is_back = True
 
-        return Agent.Action.CLIMB
+        if self._is_back and self._dir != 0:
+            self._dir -= 1
+            return Agent.Action.TURN_LEFT
+
+        if self._is_back and self._dir == 0:
+            self._AgentY -= 1
+            return Agent.Action.FORWARD
+
+
+        self._AgentY += 1
+        return Agent.Action.FORWARD
+
+
+        '''To do list:
+        1. Logic append the back tracking
+        2. Logic selet the nect path
+        '''
+
+
+
+
+
+        
+        #return Agent.Action.CLIMB
         # ======================================================================
         # YOUR CODE ENDS
         # ======================================================================
-    
+
+    def getBack(self, trace_path):
+        if not trace_path:
+            return Agent.Action.CLIMB
+
+        return trace_path.pop()
+
     # ======================================================================
     # YOUR CODE BEGINS
     # ======================================================================
