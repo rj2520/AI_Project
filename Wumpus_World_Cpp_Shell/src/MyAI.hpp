@@ -21,11 +21,20 @@
 #define MYAI_LOCK
 
 #include "Agent.hpp"
+#include <stdio.h>
 
 class MyAI : public Agent
 {
+private:
+	bool is_return = false;
+	int agentX = 0;
+	int agentY = 0;
+	int dir = 2; //Left : 0, Up : 1, Right : 2, Down : 3
+
+
 public:
 	MyAI ( void );
+
 	
 	Action getAction
 	(
