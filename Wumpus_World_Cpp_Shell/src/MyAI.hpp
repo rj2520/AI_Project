@@ -22,20 +22,53 @@
 
 #include "Agent.hpp"
 #include <stdio.h>
+#include <vector>
+#include <utility>
+#include <queue>
+
+using namespace std;
+
+struct MyTile
+	{	// 確定的pits或wumpus, 設為visited
+
+		bool pit    = true;
+		bool wumpus = true;
+		bool breeze = false;
+		bool stench = false;
+		bool bump 	= false;	
+		bool visited = false;
+		//bool gold   = false;
+		//bool known = false;
+	};
+
+enum Direction 
+	{
+		RIGHT, // 0
+		DOWN,  // 1
+		LEFT,    // 2
+		UP   // 3
+  	};
 
 class MyAI : public Agent
 {
 private:
-	bool is_return = false;
-	int agentX = 0;
-	int agentY = 0;
-	int dir = 2; //Left : 0, Up : 1, Right : 2, Down : 3
+	bool _is_return = false;
+	int _agentX = 1;
+	int _agentY = 1;
+	int _dir = RIGHT;  //RIGHT 0, DOWN 1, LEFT 2, UP 3
+	int _row = 9; // max_maze: 7*7
+	int _col = 9;
+	bool _isKillMonster = false;
+	bool _isMoveDone = true
+	//map<pair, MyTile> agentMap;
+	vector<vector<MyTile>> _agentMap;
+	stack<pair<int, int>> _stack;
+	queue<Action> _actionQueue;
 
 
 public:
 	MyAI ( void );
 
-	
 	Action getAction
 	(
 		bool stench,
@@ -48,7 +81,19 @@ public:
 	// ======================================================================
 	// YOUR CODE BEGINS
 	// ======================================================================
-	
+
+	void updateMap(bool stench, bool breeze, bool glitter, bool bump, bool scream);
+	void getReturnMove();
+	pair<int,int> nextPosition();
+	void decodePosition(pair<int,int> pos);
+	void updateAround(int x, int y);
+
+	void moveUP();
+	void moveDOWN();
+	void moveLEFT();
+	void moveRIGHT();
+
+	Action stackOperation();
 	
 	// ======================================================================
 	// YOUR CODE ENDS
