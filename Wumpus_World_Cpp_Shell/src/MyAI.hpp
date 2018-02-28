@@ -25,6 +25,9 @@
 #include <vector>
 #include <utility>
 #include <queue>
+#include <stack>
+#include <iostream>
+
 
 using namespace std;
 
@@ -59,12 +62,13 @@ private:
 	int _row = 9; // max_maze: 7*7
 	int _col = 9;
 	bool _isKillMonster = false;
-	bool _isMoveDone = true
+	bool _isMoveDone = true;
 	//map<pair, MyTile> agentMap;
 	vector<vector<MyTile>> _agentMap;
 	stack<pair<int, int>> _stack;
 	queue<Action> _actionQueue;
 
+	bool checkValid(int x, int y);
 
 public:
 	MyAI ( void );
@@ -86,7 +90,9 @@ public:
 	void getReturnMove();
 	pair<int,int> nextPosition();
 	void decodePosition(pair<int,int> pos);
-	void updateAround(int x, int y);
+	void updatePosition(int x, int y, bool breeze, bool stench);
+	void updatePositionNeighborPit(int x, int y);
+	void updatePositionNeighborWumpus(int x, int y);
 
 	void moveUP();
 	void moveDOWN();
