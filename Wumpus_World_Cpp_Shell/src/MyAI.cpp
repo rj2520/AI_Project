@@ -12,14 +12,7 @@
 
 MyAI::MyAI() : Agent()
 {
-    // ======================================================================
-    // YOUR CODE BEGINS
-    // ======================================================================
     
-    // init map   
-    // ======================================================================
-    // (1,1 is easier because we don't need to consider edge case like (i-1) < 0
-    // ======================================================================
     for (int i = 0; i < _row; i++) {
         vector <MyTile> temp_rol;
         for (int j = 0; j < _col; j++) {
@@ -32,15 +25,12 @@ MyAI::MyAI() : Agent()
                 cur_tile.pit = true;
             }
             temp_rol.push_back(cur_tile);
-            // _agentMap.push_back(cur_tile);
         }
         _agentMap.push_back(temp_rol);
         temp_rol.clear();
     }
-    // ======================================================================
-    // YOUR CODE ENDS
-    // ======================================================================
 }
+
 
 Agent::Action MyAI::getAction
 (
@@ -51,17 +41,6 @@ Agent::Action MyAI::getAction
     bool scream
 )
 {
-    // cout << "_agentX:" << _agentX << "  _agentY:" << _agentY << endl;
-    
-    // if (bump) {
-    //     if (_dir == RIGHT) {
-    //         _agentX--;
-    //     } else {
-    //         _agentY--;
-    //     }
-    //     return GRAB;
-    // }
-
     // finish all action remaining
     if (_actionQueue.size() > 0) {
         Action action = _actionQueue.front();
@@ -140,7 +119,7 @@ Agent::Action MyAI::getAction
     }
     
     //every time before we decide an action, we need to update our own map. 
-    updateMap(stench, breeze, glitter, bump, scream); //其實不用glitter
+    updateMap(stench, breeze, glitter, bump, scream); 
 
     //pos we want to move to
     pair<int,int> pos = nextPosition(bump);
@@ -168,49 +147,32 @@ Agent::Action MyAI::getAction
         return stackOperation();
     }
 
-    // ======================================================================
-    // YOUR CODE ENDS
-    // ======================================================================
 }
 
-// ======================================================================
-// YOUR CODE BEGINS
-// ======================================================================
 
 void MyAI::updatePosition(int x, int y, bool breeze, bool stench) {
     if (x < 0 || x >= _col || y < 0 || y >= _row) {
         return;
     }
     if (!breeze) {
-        //update around tile into "pits = false"
-        // if (!_agentMap[y][x - 1].visited)
             _agentMap[y][x - 1].pit = false;
-        // if (!_agentMap[y][x + 1].visited)
             _agentMap[y][x + 1].pit = false;
-        // if (!_agentMap[y - 1][x].visited)
             _agentMap[y - 1][x].pit = false;
-        // if (!_agentMap[y + 1][x].visited)
             _agentMap[y + 1][x].pit = false;
     } else {
         _agentMap[y][x].breeze = true;
-        // then update around tile(to eliminate pits)
         updatePositionNeighborPit(x + 1, y);
         updatePositionNeighborPit(x - 1, y);
         updatePositionNeighborPit(x, y - 1);
         updatePositionNeighborPit(x, y + 1);
     }
 
-    //wumpus actually can be known earlier
+    
     if (!_isShoot){
     	if (!stench) {
-        //update around tile into "wumpus" = false"
-        // if (!_agentMap[y][x - 1].visited)
             _agentMap[y][x - 1].wumpus = false;
-        // if (!_agentMap[y][x + 1].visited)
             _agentMap[y][x + 1].wumpus = false;
-        // if (!_agentMap[y - 1][x].visited)
             _agentMap[y - 1][x].wumpus = false;
-        // if (!_agentMap[y + 1][x].visited)
             _agentMap[y + 1][x].wumpus = false;
     	} else {
 	        _agentMap[y][x].stench = true;
@@ -223,7 +185,7 @@ void MyAI::updatePosition(int x, int y, bool breeze, bool stench) {
     }
     
 }
-// ./Wumpus_World -f /home/parallels/Desktop/final_project/AI_Project/Wumpus_World_World_Generator/Worlds
+
 
 bool MyAI::checkValid(int x, int y) {
     if (x < 0 || x >= _col || y < 0 || y >= _row || _agentX == x || _agentY == y) {
@@ -232,6 +194,7 @@ bool MyAI::checkValid(int x, int y) {
         return true;
     }
 }
+
 
 void MyAI::updatePositionNeighborPit(int x, int y) {
     //check around is visited and not breeze, this tile would not be a pit
@@ -245,6 +208,7 @@ void MyAI::updatePositionNeighborPit(int x, int y) {
         _agentMap[y][x].pit = false;
     } 
 }
+
 
 void MyAI::updatePositionNeighborWumpus(int x, int y) {
     //check around is visited and not breeze, this tile would not be a pit
@@ -272,15 +236,13 @@ pair<int, int>  MyAI::killWumpus(int x, int y){
 		faceLEFT();
 		return pos;
 	}
-
-	if (checkValid(x-1,y+1) && _agentMap[y+1][x-1].stench && _agentMap[y+1][x-1].visited){
+	else if (checkValid(x-1,y+1) && _agentMap[y+1][x-1].stench && _agentMap[y+1][x-1].visited){
 		pos.first = x;
 		pos.second = y + 1;
 		_isShoot = true;
 		faceLEFT();
 		return pos;
 	}
-
 	else if (checkValid(x+1,y+1) && _agentMap[y+1][x+1].stench && _agentMap[y+1][x+1].visited){
 		pos.first = x;
 		pos.second = y + 1;
@@ -288,7 +250,6 @@ pair<int, int>  MyAI::killWumpus(int x, int y){
 		faceRIGHT();
 		return pos;
 	}
-
 	else if (checkValid(x-1,y-1) && _agentMap[y-1][x+1].stench && _agentMap[y-1][x+1].visited){
 		pos.first = x;
 		pos.second = y - 1;
@@ -296,9 +257,9 @@ pair<int, int>  MyAI::killWumpus(int x, int y){
 		faceRIGHT();
 		return pos;
 	}
-
 	return pos;
 }
+
 
 Agent::Action MyAI::stackOperation() {
 
@@ -333,6 +294,7 @@ void MyAI::decodePosition(pair<int, int> pos) {
         moveDOWN();
     }
 }
+
 
 pair<int,int> MyAI::nextPosition(bool bump) {
     //start from current direction, at most turn 3 times
@@ -382,7 +344,7 @@ pair<int,int> MyAI::nextPosition(bool bump) {
     return pos;
 }
 
-//   ./Wumpus_World -f ../../Wumpus_World_World_Generator/Worlds/
+
 void MyAI::updateMap(bool stench, bool breeze, bool glitter, bool bump, bool scream) {
     if (_agentMap[_agentY][_agentX].visited) {
         return;
@@ -434,6 +396,8 @@ void MyAI::moveUP() {
     _agentY++;
     _dir = UP;
 }
+
+
 void MyAI::moveDOWN(){
     if(_dir == DOWN) {
         _actionQueue.push(FORWARD);
@@ -451,6 +415,7 @@ void MyAI::moveDOWN(){
     _agentY--;
     _dir = DOWN;
 }
+
 //RIGHT 0, DOWN 1, LEFT 2, UP 3 clockwise is TURN_RIGHT, anti-clockwise is TURN_LEFT
 void MyAI::moveLEFT() {
     if(_dir == LEFT) {
@@ -469,6 +434,7 @@ void MyAI::moveLEFT() {
     _dir = LEFT;
     _agentX--;
 }
+
 
 void MyAI::moveRIGHT() {
     if(_dir == RIGHT){
@@ -506,6 +472,7 @@ void MyAI::faceLEFT(){
     _dir = LEFT;
 }
 
+
 void MyAI::faceRIGHT(){
 	if(_dir == RIGHT){
         _actionQueue.push(SHOOT);
@@ -522,8 +489,3 @@ void MyAI::faceRIGHT(){
     }
     _dir = RIGHT;
 }
-
-
-// ======================================================================
-// YOUR CODE ENDS
-// ======================================================================

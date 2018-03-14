@@ -1,20 +1,7 @@
 // ======================================================================
 // FILE:        MyAI.hpp
 //
-// AUTHOR:      Abdullah Younis
-//
-// DESCRIPTION: This file contains your agent class, which you will
-//              implement. You are responsible for implementing the
-//              'getAction' function and any helper methods you feel you
-//              need.
-//
-// NOTES:       - If you are having trouble understanding how the shell
-//                works, look at the other parts of the code, as well as
-//                the documentation.
-//
-//              - You are only allowed to make changes to this portion of
-//                the code. Any changes to other portions of the code will
-//                be lost when the tournament runs your code.
+// AUTHOR:      Yuchun Liu & Jian-Lun Huang
 // ======================================================================
 
 #ifndef MYAI_LOCK
@@ -32,24 +19,21 @@
 using namespace std;
 
 struct MyTile
-    {   // 確定的pits或wumpus, 設為visited
-
+    {   
         bool pit    = true;
         bool wumpus = true;
         bool breeze = false;
         bool stench = false;
         bool bump   = false;    
         bool visited = false;
-        //bool gold   = false;
-        //bool known = false;
     };
 
 enum Direction 
     {
-        RIGHT, // 0
-        DOWN,  // 1
-        LEFT,  // 2
-        UP     // 3
+        RIGHT, 
+        DOWN,  
+        LEFT,  
+        UP    
     };
 
 class MyAI : public Agent
@@ -64,8 +48,6 @@ private:
     bool _isShoot = false;
     bool _isMoveDone = true;
     pair <int, int> _wumpusPos = make_pair(0,0);
-
-    //map<pair, MyTile> agentMap;
     vector<vector<MyTile>> _agentMap;
     stack<pair<int, int>> _stack;
     queue<Action> _actionQueue;
@@ -84,10 +66,6 @@ public:
         bool scream
     );
     
-    // ======================================================================
-    // YOUR CODE BEGINS
-    // ======================================================================
-
     void updateMap(bool stench, bool breeze, bool glitter, bool bump, bool scream);
     void getReturnMove();
     pair<int,int> nextPosition(bool bump);
@@ -106,10 +84,6 @@ public:
 
 
     Action stackOperation();
-    
-    // ======================================================================
-    // YOUR CODE ENDS
-    // ======================================================================
 };
 
 #endif
